@@ -4,10 +4,10 @@
 <!-- debug="false"当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。-->
 <configuration scan="true" scanPeriod="1800 seconds" debug="false">
 	<!-- 上下文名称  -->
-    <contextName>person-photo</contextName>
+    <contextName>photo-login</contextName>
 	<!-- 存放日志文件路径 -->
 	<property name="USER_HOME" value="logs" />
-	<property scope="context" name="FILE_NAME" value="photos" />
+	<property scope="context" name="FILE_NAME" value="photo-login" />
 	<timestamp key="byDay" datePattern="yyyy-MM-dd" />
 	<!-- ch.qos.logback.core.ConsoleAppender 控制台输出 -->
 	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

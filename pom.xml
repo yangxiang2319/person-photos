@@ -18,6 +18,10 @@
     </properties>
 
     <modules>
+        <module>photo-util</module>
+        <module>photo-entity</module>
+        <module>photo-login-api</module>
+        <module>photo-login</module>
         <module>photo</module>
     </modules>
 
