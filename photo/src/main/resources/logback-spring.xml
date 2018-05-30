@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- scan="true"    当此属性设置为true时，配置文件如果发生改变，将会被重新加载，默认值为true。 -->
+<!--  scanPeriod="30 seconds"   设置每30秒自动扫描,若没有指定具体单位则以milliseconds为标准(单位:milliseconds, seconds, minutes or hours)  -->
+<!-- debug="false"当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。-->
+<configuration scan="true" scanPeriod="1800 seconds" debug="false">
+	<!-- 上下文名称  -->
+    <contextName>person-photo</contextName>
+	<!-- 存放日志文件路径 -->
+	<property name="USER_HOME" value="logs" />
+	<property scope="context" name="FILE_NAME" value="photos" />
+	<timestamp key="byDay" datePattern="yyyy-MM-dd" />
+	<!-- ch.qos.logback.core.ConsoleAppender 控制台输出 -->
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>
+				<!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+				%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%-5level]  %logger - %msg%n
+			</Pattern>
+		</layout>
+	</appender>
+	<!-- 文件输出 -->
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<Encoding>UTF-8</Encoding>
+		<!-- 根据时间来制定滚动策略 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${USER_HOME}/photos/%d{yyyyMMdd}/photos%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+			<maxHistory>90</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+               <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy> 
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<Pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger - %msg%n</Pattern>
+		</layout>
+	</appender>
+	<!-- 控制java下面包的打印,没设置等级,将继承上级root的等级 -->
+	<logger name="com.yx.photo" level="debug" additivity="true">
+	</logger>
+	<!-- 当前日志总级别为TRACE、DEBUG、INFO、 WARN、ERROR、ALL和 OF -->
+	<root level="info">
+		<appender-ref ref="CONSOLE"/>
+		<appender-ref ref="FILE"/>
+	</root>
+</configuration>
