@@ -12,6 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/goLogin")
 public class LoginController {
 
+    /**
+     *  返回登录页面
+     * @author yangxiang
+     * @date 2018/7/17 22:49
+     * @param
+     * @return
+     */
     @RequestMapping("/login.do")
     public String login(){
         return "login";
