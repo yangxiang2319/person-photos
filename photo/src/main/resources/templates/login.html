@@ -2,11 +2,114 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
-    <title>登录</title>
+    <title>个人相册系统登录</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" th:href="@{/layui/css/layui.css}"  media="all">
+    <link rel="icon" th:href="@{/images/login/icon.ico}" type="image/x-icon" />
+    <style>
+        .loginDiv{
+            margin: 0 auto;
+            border: 1px solid mediumspringgreen;
+            width: 500px;
+            height: 300px;
+            margin-top: 200px;
+            background-color: #97977b;
+            text-align: center;
+        }
+        .title{
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-size: 21px;
+        }
+        .inputLength{
+            width: 280px!important;
+        }
+        body{
+            background: #00FF00 url(/photo/images/login/timg.jpg) fixed top;
+        }
+        .button{
+            margin-left:150px;
+            margin-top: 40px;
+        }
+    </style>
 </head>
 
-<body>
-  欢迎！
-</body>
 
+
+<body>
+
+<div class="loginDiv">
+    <form class="layui-form" lay-filter="login">
+        <p class="title">登录</p>
+        <div class="layui-form-item">
+            <label class="layui-form-label">用户名</label>
+            <div class="layui-input-inline">
+                <input type="text" name="username" required lay-verify="username" autocomplete="off" placeholder="请输入用户名" class="layui-input inputLength">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">密码框</label>
+            <div class="layui-input-inline">
+                <input type="password" name="password" required lay-verify="password" placeholder="请输入密码" autocomplete="off" class="layui-input inputLength">
+            </div>
+        </div>
+        <div class="layui-form-item button">
+            <div class="layui-input-inline">
+                <button class="layui-btn" lay-submit lay-filter="submit">登录</button>
+                <button type="reset" class="layui-btn layui-btn-warm" style="margin-left: 50px;">注册</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/layui/layui.js}" charset="utf-8"></script>
+<script>
+    var pathName=window.document.location.pathname;//全路径名
+    var basePath=pathName.substring(0,pathName.substr(1).indexOf('/')+1);//工程绝对路径名
+
+    layui.use(['form', 'layedit', 'laydate'], function(){
+        var form = layui.form
+            ,layer = layui.layer,
+            $= layui.jquery;;
+
+        //自定义验证规则
+        form.verify({
+            username: function(value){
+                if(value.length < 1){
+                    return '用户名不能为空';
+                }
+            }
+            ,password: function (value) {
+                if(value.length < 1){
+                    return '密码不能为空';
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(submit)', function(data){
+
+            var index = layer.load();
+            $.post(basePath + "/bus/loginValidate", data.field, function (rst) {
+                if(rst.code == '1'){
+                    layer.alert(rst.msg, {
+                        title: '提示信息'
+                    });
+                }else if(rst.code == '0'){
+                    layer.close(index);
+                    //打开主页面
+                    window.open(basePath + "/bus/show", "_self");
+                }
+
+            },'json');
+
+            return false;
+        });
+
+    });
+</script>
+
+</body>
 </html>

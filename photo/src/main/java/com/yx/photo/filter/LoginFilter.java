@@ -52,41 +52,7 @@ public class LoginFilter implements Filter{
             filterChain.doFilter(httpRequest, httpResponse);
         }else{
 
-            //token验证
-            Cookie[] cookies = httpRequest.getCookies();
-            String token = null;
-            if(cookies != null && cookies.length > 0){
-                for(Cookie cookie : cookies){
-                    if("photoToken".equals(cookie.getName())){
-                        token = cookie.getValue();
-                    }
-                }
-            }
-
-            //如果token为空，则跳转到登录页面
-            if(token == null){
-                log.info("token为空，跳转到登录页面。。。");
-                String path = httpRequest.getContextPath();
-                String basePath = httpRequest.getScheme()+"://"+httpRequest.getServerName()+":"+httpRequest.getServerPort()+path;
-                httpResponse.sendRedirect(basePath+"/goLogin/login.do");
-            }else{
-                log.info("token:{}", token);
-                //boolean flag = TokenUtil.parseToken(token);
-                boolean flag = false;
-                if(!flag){
-                    log.info("token验证失败，跳转到登录页面。。。");
-                    String path = httpRequest.getContextPath();
-                    String basePath = httpRequest.getScheme()+"://"+httpRequest.getServerName()+":"+httpRequest.getServerPort()+path;
-                    httpResponse.sendRedirect(basePath+"/goLogin/login.do");
-                }else{
-                    //刷新cookie中的token信息
-                    Cookie cookie = new Cookie("photoToken", token);
-                    cookie.setMaxAge(30*60);// 设置为30min
-                    cookie.setPath("/");
-                    httpResponse.addCookie(cookie);
-
-                }
-            }
+            //session验证
 
             filterChain.doFilter(httpRequest, httpResponse);
         }
