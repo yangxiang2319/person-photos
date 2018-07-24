@@ -46,7 +46,7 @@
         <div class="layui-form-item">
             <label class="layui-form-label">用户名</label>
             <div class="layui-input-inline">
-                <input type="text" name="username" required lay-verify="username" autocomplete="off" placeholder="请输入用户名" class="layui-input inputLength">
+                <input type="text" name="userName" required lay-verify="userName" autocomplete="off" placeholder="请输入用户名" class="layui-input inputLength">
             </div>
         </div>
         <div class="layui-form-item">
@@ -76,7 +76,7 @@
 
         //自定义验证规则
         form.verify({
-            username: function(value){
+            userName: function(value){
                 if(value.length < 1){
                     return '用户名不能为空';
                 }
@@ -90,15 +90,10 @@
 
         //监听提交
         form.on('submit(submit)', function(data){
-
-            var index = layer.load();
             $.post(basePath + "/bus/loginValidate", data.field, function (rst) {
                 if(rst.code == '1'){
-                    layer.alert(rst.msg, {
-                        title: '提示信息'
-                    });
+                    layer.msg(rst.msg, { icon: 5});
                 }else if(rst.code == '0'){
-                    layer.close(index);
                     //打开主页面
                     window.open(basePath + "/bus/show", "_self");
                 }

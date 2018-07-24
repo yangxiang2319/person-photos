@@ -1,5 +1,6 @@
 package com.yx.photo.filter;
 
+import com.yx.photo.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -7,6 +8,7 @@ import javax.servlet.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 /**
@@ -48,13 +50,22 @@ public class LoginFilter implements Filter{
                 || url.indexOf("js/")!=-1
                 || url.indexOf("lay")!=-1
                 || url.equals("goLogin/login.do")
+                || url.equals("bus/loginValidate")
                 ){
             filterChain.doFilter(httpRequest, httpResponse);
         }else{
 
             //session验证
+            HttpSession session = httpRequest.getSession();
+            if(session.getAttribute("user") == null){
+                log.info("session信息不存在或已失效，跳转到登录页面");
+                String path = httpRequest.getContextPath();
+                String basePath = httpRequest.getScheme()+"://"+httpRequest.getServerName()+":"+httpRequest.getServerPort()+path;
+                httpResponse.sendRedirect(basePath+"/goLogin/login.do");
+            }else{
+                filterChain.doFilter(httpRequest, httpResponse);
+            }
 
-            filterChain.doFilter(httpRequest, httpResponse);
         }
     }
 
